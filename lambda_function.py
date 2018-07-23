@@ -128,7 +128,7 @@ def updatevalue(arrayinput,ws):
 #get data from google sheets
 
 #get data from google sheets
-def getdata(url='https://docs.google.com/spreadsheets/d/e/2PACX-1vQUZvwS_Uue7j4zfhZcw1AIujz_fZvAh7RSRnmozQJmE6j69-djrGYuZWcGTwGa446b6CtU-k-I3rkh/pub?gid=1649651434&single=true&output=csv'):
+def getdata(url='https://docs.google.com/spreadsheets/d/e/2PACX-1vQUZvwS_Uue7j4zfhZcw1AIujz_fZvAh7RSRnmozQJmE6j69-djrGYuZWcGTwGa446b6CtU-k-I3rkh/pub?gid=1649651434&single=true&output=tsv'):
     t=requests.get(url)
     t.encoding='utf-8'
     infostring=t.text
@@ -138,7 +138,7 @@ def parseIntoArray(infostring):
     line = infostring.split('\r\n')
     s = []
     for i in line:
-        s.append(i.split(','))
+        s.append(i.split('\t'))
     return s
 ##get data and parse into array##
 def getarray():
@@ -161,7 +161,8 @@ def findworks(data,workername,todaystring):
             condition2= j[0]!='finished'
             condition3= convertTodate(j[6]) <= today
             condition4= j[12]==workername
-            if (condition1 * condition2 * condition3)or(condition4 * condition2 * condition3): 
+            condition5= convertTodate(j[8]) >= today
+            if (condition1 * condition2 * condition3*condition5)or(condition4 * condition2 * condition3*condition5): 
                 if printout != '':
                     printout +='\n'
                 printout += j[3]
